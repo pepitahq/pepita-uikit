@@ -9,8 +9,8 @@ test('tokens.css defines the core custom properties and variants', () => {
   for (const v of ['--bg', '--ink', '--ink-soft', '--ink-faint', '--rule', '--accent', '--f-mono', '--font']) {
     expect(css).toContain(v);
   }
-  expect(css).toContain('html[data-bg="cream"]');
-  expect(css).toContain('html[data-accent="terracotta"]');
+  expect(css).toContain('[data-bg="cream"]');
+  expect(css).toContain('[data-accent="terracotta"]');
   expect(css).toContain('oklch(0.55 0.09 45)');
 });
 

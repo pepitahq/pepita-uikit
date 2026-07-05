@@ -159,6 +159,11 @@
     gap: 0.4rem;
     cursor: pointer;
     padding: 0.35rem 0.6rem;
+    /* buttons carry a UA border/appearance ("embossed" look) unless reset —
+       the app got this free from Tailwind preflight; the kit must be self-contained. */
+    border: 0;
+    appearance: none;
+    -webkit-appearance: none;
   }
   .split-primary:disabled { opacity: 0.5; cursor: default; }
   .split-caret { padding: 0.35rem 0.4rem; }
