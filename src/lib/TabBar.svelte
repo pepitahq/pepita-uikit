@@ -1,7 +1,9 @@
+<script module lang="ts">
+  export type TabItem = { id: string; label: string; closable?: boolean };
+</script>
+
 <script lang="ts">
   import Tab from './Tab.svelte';
-
-  export type TabItem = { id: string; label: string; closable?: boolean };
 
   let {
     tabs,
