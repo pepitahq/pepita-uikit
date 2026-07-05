@@ -4,17 +4,20 @@
   let {
     href,
     label = 'Continue with Google',
-    disabled = false,
-    provider = 'google'
+    disabled = false
   }: {
     href: string;
     label?: string;
     disabled?: boolean;
-    provider?: 'google';
   } = $props();
 </script>
 
-<a class="cta cta-google" {href} aria-disabled={disabled}>
+<a
+  class="cta cta-google"
+  href={disabled ? undefined : href}
+  aria-disabled={disabled}
+  tabindex={disabled ? -1 : undefined}
+>
   <span class="g-badge" aria-hidden="true"><GoogleMark /></span>
   {label}
 </a>

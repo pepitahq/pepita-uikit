@@ -132,6 +132,11 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
+  /* phosphor icons render inside a child-component scope, so target them
+     globally but only within this component's root (no Tailwind dependency). */
+  .sam :global(.animate-spin) { animation: pp-spin 1s linear infinite; }
+  .sam :global(.shrink-0) { flex-shrink: 0; }
+  @keyframes pp-spin { to { transform: rotate(360deg); } }
   .env-label {
     display: flex;
     flex-direction: column;

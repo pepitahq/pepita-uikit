@@ -14,3 +14,11 @@ test('adds no-prefix class when no prefix snippet is provided', () => {
   render(TextInput, { props: { value: '' } });
   expect(screen.getByRole('textbox')).toHaveClass('no-prefix');
 });
+
+test('associates the label with the input via for/id', () => {
+  const { container } = render(TextInput, { props: { label: 'Slug', value: '' } });
+  const label = container.querySelector('label')!;
+  const input = screen.getByRole('textbox');
+  expect(input.id).toBeTruthy();
+  expect(label.getAttribute('for')).toBe(input.id);
+});

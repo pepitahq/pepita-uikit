@@ -1,7 +1,3 @@
-<script module lang="ts">
-  let uid = 0;
-</script>
-
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
@@ -27,8 +23,8 @@
     prefix?: Snippet;
   } = $props();
 
-  const fallbackId = `pp-textinput-${(uid += 1)}`;
-  const inputId = $derived(id ?? fallbackId);
+  const autoId = $props.id();
+  const inputId = $derived(id ?? autoId);
 </script>
 
 <div class="field">

@@ -24,6 +24,8 @@
    excluded here. */
 .cta:disabled:not(.cta-create) { cursor: not-allowed; opacity: 0.55; }
 .cta:disabled:not(.cta-create):hover { background: var(--ink); border-color: var(--ink); }
+/* Anchors (<a>) can't use :disabled — mirror the look/behavior via aria-disabled. */
+.cta[aria-disabled="true"] { pointer-events: none; opacity: 0.55; }
 
 /* google-styled cta padding variant (sign-in) */
 .cta.cta-google { padding: 0.85rem 1.35rem 0.85rem 1rem; gap: 0.7rem; }

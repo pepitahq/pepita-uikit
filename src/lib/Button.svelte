@@ -31,7 +31,14 @@
 </script>
 
 {#if href}
-  <a class={cls} {href} {title} aria-disabled={disabled}>
+  <a
+    class={cls}
+    href={disabled ? undefined : href}
+    {title}
+    aria-disabled={disabled}
+    tabindex={disabled ? -1 : undefined}
+    {onclick}
+  >
     {#if icon}{@render icon()}{/if}
     {@render children()}
   </a>

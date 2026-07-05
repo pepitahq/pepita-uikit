@@ -30,6 +30,9 @@ html[data-font="mono"]  { --font: var(--f-mono); }
 html[data-font="serif"] { --font: var(--f-serif); }
 html[data-font="sans"]  { --font: var(--f-sans); }
 
+/* Deliberate deviations from the app's styles.css: box-sizing is broadened to
+   pseudo-elements, and the app-only layout-shell rules (html/body margin,
+   height, flex column) are omitted — layout doesn't belong in a token layer. */
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
