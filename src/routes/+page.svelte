@@ -15,6 +15,10 @@
   import { dialog } from '$lib/dialog-store.svelte';
   import Toaster from '$lib/Toaster.svelte';
   import { toast } from '$lib/toast-store.svelte';
+  import SegmentedControl from '$lib/SegmentedControl.svelte';
+  import Badge from '$lib/Badge.svelte';
+  import Tooltip from '$lib/Tooltip.svelte';
+  import ChartTooltip from '$lib/ChartTooltip.svelte';
 
   let galleryTab = $state('ai');
   let healthTab = $state('headers');
@@ -27,6 +31,26 @@
   let ctxOpen = $state(false);
   let ctxX = $state(0);
   let ctxY = $state(0);
+  let segVal = $state('7d');
+
+  // ChartTooltip demo — a tiny bar chart; hovering a bar shows the tooltip at the cursor.
+  const demoBars = [
+    { label: 'Mon', v: 42 },
+    { label: 'Tue', v: 30 },
+    { label: 'Wed', v: 55 },
+    { label: 'Thu', v: 18 },
+    { label: 'Fri', v: 61 },
+    { label: 'Sat', v: 12 },
+    { label: 'Sun', v: 24 }
+  ];
+  const demoMax = Math.max(...demoBars.map((b) => b.v));
+  let tip = $state({ x: 0, y: 0, visible: false, label: '', v: 0 });
+  function overBar(e: PointerEvent, b: { label: string; v: number }) {
+    tip = { x: e.clientX, y: e.clientY, visible: true, label: b.label, v: b.v };
+  }
+  function leaveBar() {
+    tip = { ...tip, visible: false };
+  }
 
   const menuItems = [
     { label: 'Rename', onSelect: () => {} },
@@ -140,6 +164,35 @@
     <h2>Menu (standalone)</h2>
     <div style="display:inline-block;"><Menu items={menuItems} /></div>
   </section>
+
+  <section>
+    <h2>SegmentedControl</h2>
+    <SegmentedControl
+      options={[
+        { value: '24h', label: '24h' },
+        { value: '7d', label: '7d' },
+        { value: '30d', label: '30d' }
+      ]}
+      bind:value={segVal}
+    />
+  </section>
+
+  <section>
+    <h2>Badge</h2>
+    <div class="row">
+      <Badge>{'neutral'}</Badge>
+      <Badge variant="success">{'active'}</Badge>
+      <Badge variant="warning">{'pending'}</Badge>
+      <Badge variant="error">{'failed'}</Badge>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tooltip</h2>
+    <Tooltip text="Balanced — Sonnet 5. What you want most of the time.">
+      <button type="button" class="cta cta-new">Hover / focus me</button>
+    </Tooltip>
+  </section>
 {/snippet}
 
 <main>
@@ -222,6 +275,27 @@
         <Button variant="new" onclick={() => toast.error('Publish failed.')}>{'error'}</Button>
       </div>
     </section>
+
+    <section>
+      <h2>ChartTooltip</h2>
+      <p class="frame-label">Hover the bars.</p>
+      <div class="demo-chart">
+        {#each demoBars as b (b.label)}
+          <div
+            class="demo-bar"
+            style:height="{Math.round((b.v / demoMax) * 100)}%"
+            role="img"
+            aria-label="{b.label}: {b.v} visitors"
+            onpointerenter={(e) => overBar(e, b)}
+            onpointermove={(e) => overBar(e, b)}
+            onpointerleave={leaveBar}
+          ></div>
+        {/each}
+      </div>
+      <ChartTooltip x={tip.x} y={tip.y} visible={tip.visible}>
+        {#snippet content()}<strong>{tip.label}</strong> · {tip.v} visitors{/snippet}
+      </ChartTooltip>
+    </section>
   </div>
 </main>
 
@@ -278,6 +352,25 @@
     padding: 1rem;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
     font-size: 13px;
+  }
+  .demo-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 8rem;
+    padding: 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .demo-bar {
+    flex: 1;
+    min-height: 4px;
+    background: color-mix(in oklch, var(--accent) 55%, var(--bg));
+    border-radius: 3px 3px 0 0;
+    transition: background 120ms;
+  }
+  .demo-bar:hover {
+    background: var(--accent);
   }
   .ctx-target {
     display: grid;

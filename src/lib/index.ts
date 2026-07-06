@@ -32,3 +32,11 @@ export type { DialogRequest } from './dialog-store.svelte';
 export { default as Toaster } from './Toaster.svelte';
 export { toast } from './toast-store.svelte';
 export type { ToastVariant, ToastItem } from './toast-store.svelte';
+
+// Feedback & controls
+export { default as SegmentedControl } from './SegmentedControl.svelte';
+export type { SegOption } from './SegmentedControl.svelte';
+export { default as Badge } from './Badge.svelte';
+export type { BadgeVariant } from './Badge.svelte';
+export { default as Tooltip } from './Tooltip.svelte';
+export { default as ChartTooltip } from './ChartTooltip.svelte';
