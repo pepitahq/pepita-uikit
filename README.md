@@ -97,6 +97,7 @@ All components are presentational — you pass data + callbacks; you wire the be
 | `Modal` | `open` (bindable), `title?`, `width?`, `height?`, `onClose?` → `icon?`, `tabs?`, `children` (body), `footer?`. Focus-trap + Escape/backdrop close. |
 | `UnderlineTabBar` | `tabs: {id,label,icon?}[]`, `activeId`, `onSelect(id)` — the modal-style tabs |
 | `Dialog` + `dialog` | imperative `dialog.alert/confirm/prompt`; mount `<Dialog />` once at the root |
+| `Toaster` + `toast` | transient notifications: `toast.info/success/error(msg, { duration? })`; mount `<Toaster />` once |
 
 Layering: `Modal` (z 50) < `Popover`/`Menu` (z 60) < `Dialog`/`ContextMenu` (z 100).
 

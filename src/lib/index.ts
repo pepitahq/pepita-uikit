@@ -29,3 +29,6 @@ export { default as Modal } from './Modal.svelte';
 export { default as Dialog } from './Dialog.svelte';
 export { dialog } from './dialog-store.svelte';
 export type { DialogRequest } from './dialog-store.svelte';
+export { default as Toaster } from './Toaster.svelte';
+export { toast } from './toast-store.svelte';
+export type { ToastVariant, ToastItem } from './toast-store.svelte';

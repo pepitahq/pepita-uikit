@@ -13,6 +13,8 @@
   import Modal from '$lib/Modal.svelte';
   import Dialog from '$lib/Dialog.svelte';
   import { dialog } from '$lib/dialog-store.svelte';
+  import Toaster from '$lib/Toaster.svelte';
+  import { toast } from '$lib/toast-store.svelte';
 
   let galleryTab = $state('ai');
   let healthTab = $state('headers');
@@ -211,10 +213,20 @@
       </div>
       <ContextMenu bind:open={ctxOpen} x={ctxX} y={ctxY} items={menuItems} />
     </section>
+
+    <section>
+      <h2>Toast</h2>
+      <div class="row">
+        <Button variant="new" onclick={() => toast.info('Working…')}>{'info'}</Button>
+        <Button variant="new" onclick={() => toast.success('Saved.')}>{'success'}</Button>
+        <Button variant="new" onclick={() => toast.error('Publish failed.')}>{'error'}</Button>
+      </div>
+    </section>
   </div>
 </main>
 
 <Dialog />
+<Toaster />
 
 <style>
   main {
