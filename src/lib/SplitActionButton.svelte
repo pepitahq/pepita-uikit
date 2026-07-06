@@ -8,6 +8,7 @@
     Check
   } from 'phosphor-svelte';
   import type { Snippet } from 'svelte';
+  import Popover from './Popover.svelte';
 
   let {
     kind,
@@ -35,7 +36,7 @@
 
   let open = $state(false);
   let copied = $state<string | null>(null);
-  let root = $state<HTMLElement | null>(null);
+  let caretEl = $state<HTMLElement>();
 
   const hasMenu = $derived(Boolean(downloadHref || urls.length));
 
@@ -51,18 +52,10 @@
     }
   }
 
-  function onWindowClick(e: MouseEvent) {
-    if (open && root && !root.contains(e.target as Node)) open = false;
-  }
-  function onKey(e: KeyboardEvent) {
-    if (e.key === 'Escape') open = false;
-  }
   const envLabel = $derived(kind === 'draft' ? ['DRAFT', 'SITE'] : ['LIVE', 'SITE']);
 </script>
 
-<svelte:window onclick={onWindowClick} onkeydown={onKey} />
-
-<div class="sam" bind:this={root}>
+<div class="sam">
   <div class="env-label" class:env-live={kind === 'live'} aria-hidden="true">
     <span>{envLabel[0]}</span><span>{envLabel[1]}</span>
   </div>
@@ -80,6 +73,7 @@
       <button
         type="button"
         class="split-caret"
+        bind:this={caretEl}
         onclick={() => (open = !open)}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -90,8 +84,10 @@
     {/if}
   </div>
 
-  {#if open && hasMenu}
-    <div class="menu" role="menu">
+  {#if hasMenu}
+    <Popover bind:open anchorEl={caretEl} placement="bottom-end">
+      {#snippet content()}
+        <div class="menu" role="menu">
       {#if downloadHref}
         <a class="menu-download" href={downloadHref} download role="menuitem">
           <DownloadSimple size={15} weight="bold" />
@@ -119,7 +115,9 @@
           {/each}
         </div>
       {/if}
-    </div>
+        </div>
+      {/snippet}
+    </Popover>
   {/if}
 </div>
 
