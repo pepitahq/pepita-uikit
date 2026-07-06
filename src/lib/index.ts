@@ -1,3 +1,4 @@
+import './styles/theme.css';
 import './styles/tokens.css';
 import './styles/primitives.css';
 

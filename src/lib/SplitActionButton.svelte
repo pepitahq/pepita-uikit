@@ -145,7 +145,7 @@
     color: var(--ink-faint);
     font-weight: 600;
   }
-  .env-label.env-live { color: rgb(5 150 105); }
+  .env-label.env-live { color: color-mix(in srgb, var(--success) 78%, var(--ink)); }
 
   .split { display: inline-flex; align-items: stretch; border-radius: 6px; overflow: hidden; }
   .split-primary,
@@ -167,22 +167,24 @@
   .split-caret { padding: 0.35rem 0.4rem; }
 
   .split.draft { border: 1px solid var(--rule); }
-  .split.draft .split-primary { background: #fff; color: var(--ink); }
-  .split.draft .split-caret { background: #fff; color: var(--ink-soft); border-left: 1px solid var(--rule); }
+  .split.draft .split-primary { background: var(--surface-raised); color: var(--ink); }
+  .split.draft .split-caret { background: var(--surface-raised); color: var(--ink-soft); border-left: 1px solid var(--rule); }
   .split.draft .split-primary:hover:not(:disabled),
-  .split.draft .split-caret:hover { background: color-mix(in oklch, var(--ink) 5%, #fff); }
+  .split.draft .split-caret:hover { background: color-mix(in oklch, var(--ink) 6%, var(--surface-raised)); }
 
-  .split.live .split-primary { background: rgb(5 150 105); color: #fff; }
-  .split.live .split-caret { background: rgb(5 150 105); color: #fff; border-left: 1px solid rgba(255, 255, 255, 0.28); }
+  /* Publish = the theme's success color. Rosé Pine's success (pine) is a
+     deep teal, so light text reads better than dark. */
+  .split.live .split-primary { background: var(--success); color: #fff; }
+  .split.live .split-caret { background: var(--success); color: #fff; border-left: 1px solid rgba(255, 255, 255, 0.22); }
   .split.live .split-primary:hover:not(:disabled),
-  .split.live .split-caret:hover { background: rgb(4 120 87); }
+  .split.live .split-caret:hover { background: color-mix(in srgb, var(--success) 88%, black); }
 
   .menu {
     position: absolute;
     top: calc(100% + 6px);
     right: 0;
     width: 300px;
-    background: var(--bg);
+    background: var(--surface-raised);
     border: 1px solid var(--rule);
     border-radius: 8px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
@@ -211,7 +213,7 @@
   }
   .url-box { background: var(--ink); border-radius: 8px; overflow: hidden; }
   .url-row { display: flex; align-items: center; gap: 0.25rem; padding: 0.2rem; }
-  .url-row + .url-row { border-top: 1px solid rgba(255, 255, 255, 0.09); }
+  .url-row + .url-row { border-top: 1px solid color-mix(in srgb, var(--bg) 12%, transparent); }
   .url-open {
     flex: 1;
     min-width: 0;
@@ -227,7 +229,7 @@
   .url-open .u { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .url-copy {
     flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--bg) 12%, transparent);
     color: var(--bg);
     border: 0;
     border-radius: 6px;
@@ -236,5 +238,5 @@
     cursor: pointer;
     display: inline-flex;
   }
-  .url-copy:hover { background: rgba(255, 255, 255, 0.18); }
+  .url-copy:hover { background: color-mix(in srgb, var(--bg) 22%, transparent); }
 </style>

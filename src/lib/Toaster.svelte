@@ -105,31 +105,40 @@
     background: rgba(0, 0, 0, 0.06);
   }
 
-  /* Variant tints (match pepita's editor toasts). */
+  /* Variant tints — derived from the theme's status tokens (one base color per
+     status), so they stay coherent in light + dark and under other themes. */
   .toast-success {
-    background: #f0fdf4;
-    border-color: #bbf7d0;
-    color: #166534;
+    background: color-mix(in srgb, var(--success) 14%, var(--bg));
+    border-color: color-mix(in srgb, var(--success) 40%, var(--bg));
+    color: color-mix(in srgb, var(--success) 72%, var(--ink));
   }
   .toast-error {
-    background: #fef2f2;
-    border-color: #fecaca;
-    color: #991b1b;
+    background: color-mix(in srgb, var(--error) 14%, var(--bg));
+    border-color: color-mix(in srgb, var(--error) 40%, var(--bg));
+    color: color-mix(in srgb, var(--error) 72%, var(--ink));
   }
   .toast-warning {
-    background: #fffbeb;
-    border-color: #fde68a;
-    color: #78350f;
+    background: color-mix(in srgb, var(--warning) 14%, var(--bg));
+    border-color: color-mix(in srgb, var(--warning) 40%, var(--bg));
+    color: color-mix(in srgb, var(--warning) 72%, var(--ink));
   }
+  /* info is a low-priority notice — neutral grey, not a status hue. Rosé
+     Pine's success + info are both teal, so info drops its hue rather than
+     clash; a plain grey notice reads as clearly distinct. */
   .toast-info {
-    background: #eff6ff;
-    border-color: #bfdbfe;
-    color: #1e40af;
+    background: color-mix(in srgb, var(--ink) 4%, var(--bg));
+    border-color: var(--rule);
+    color: var(--ink);
   }
+  .toast-ico { color: var(--toast-color, currentColor); }
+  .toast-success .toast-ico { color: var(--success); }
+  .toast-error .toast-ico { color: var(--error); }
+  .toast-warning .toast-ico { color: var(--warning); }
+  .toast-info .toast-ico { color: var(--ink-soft); }
   .toast-warning .toast-action {
-    background: #fde68a;
+    background: color-mix(in srgb, var(--warning) 32%, var(--bg));
   }
   .toast-warning .toast-action:hover {
-    background: #fcd34d;
+    background: color-mix(in srgb, var(--warning) 45%, var(--bg));
   }
 </style>

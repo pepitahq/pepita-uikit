@@ -161,7 +161,7 @@
   .dialog-card {
     width: 100%;
     max-width: 28rem;
-    background: var(--bg);
+    background: var(--surface-raised);
     border: 1px solid var(--rule);
     border-radius: 6px;
     box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.35);
@@ -176,7 +176,7 @@
     border-bottom: 1px solid var(--rule);
   }
   .dialog-head :global(.dlg-warn) {
-    color: oklch(0.55 0.18 20);
+    color: var(--error);
   }
   .dialog-head h2 {
     font-family: var(--font);
@@ -202,7 +202,7 @@
     font-family: var(--font);
     font-size: 13px;
     color: var(--ink);
-    background: white;
+    background: var(--surface);
     border: 1px solid var(--rule);
     border-radius: 4px;
   }
@@ -236,19 +236,19 @@
   }
   .dialog-btn-primary {
     background: var(--ink);
-    color: white;
+    color: var(--on-accent);
     border-color: var(--ink);
   }
   .dialog-btn-primary:hover {
-    background: color-mix(in oklch, var(--ink) 88%, white);
+    background: color-mix(in oklch, var(--ink) 88%, var(--accent));
   }
   .dialog-btn-destructive {
-    background: oklch(0.55 0.18 20);
-    color: white;
-    border-color: oklch(0.55 0.18 20);
+    background: var(--error);
+    color: var(--on-accent);
+    border-color: var(--error);
   }
   .dialog-btn-destructive:hover {
-    background: oklch(0.5 0.18 20);
+    background: color-mix(in srgb, var(--error) 86%, black);
   }
   .dialog-btn:focus-visible {
     outline: 2px solid var(--accent);

@@ -77,7 +77,7 @@
 
 <style>
   .menu {
-    background: var(--bg);
+    background: var(--surface-raised);
     border: 1px solid var(--rule);
     border-radius: 6px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
@@ -112,12 +112,12 @@
     cursor: not-allowed;
   }
   .menu-item.danger {
-    color: oklch(0.55 0.18 20);
+    color: color-mix(in srgb, var(--error) 82%, var(--ink));
   }
   .menu-item.danger:hover:not(:disabled),
   .menu-item.danger:focus-visible {
-    background: color-mix(in oklch, oklch(0.55 0.18 20) 14%, transparent);
-    color: oklch(0.5 0.18 20);
+    background: color-mix(in srgb, var(--error) 14%, transparent);
+    color: color-mix(in srgb, var(--error) 82%, var(--ink));
   }
   .menu-ico {
     display: inline-flex;

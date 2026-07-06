@@ -126,7 +126,7 @@
   .modal-panel {
     display: flex;
     flex-direction: column;
-    background: var(--bg);
+    background: var(--surface-raised);
     color: var(--ink);
     border: 1px solid var(--rule);
     border-radius: 8px;

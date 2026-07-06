@@ -42,7 +42,7 @@
     padding: 0.55rem 0.7rem;
     border-radius: 5px;
     border: 1px solid var(--rule);
-    background: color-mix(in oklch, var(--bg) 60%, white);
+    background: var(--surface-raised);
     box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.18);
     font-family: var(--font);
     font-size: 11.5px;

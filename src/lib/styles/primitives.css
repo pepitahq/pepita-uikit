@@ -43,7 +43,7 @@
 .cta-create:disabled {
   background: color-mix(in oklch, var(--ink) 28%, var(--bg));
   border-color: color-mix(in oklch, var(--ink) 28%, var(--bg));
-  color: color-mix(in oklch, var(--bg) 85%, white);
+  color: color-mix(in oklch, var(--bg) 82%, var(--ink));
   cursor: not-allowed;
 }
 .cta-create:disabled:hover {
@@ -89,7 +89,7 @@
   padding: 0.3rem 0.55rem;
   border-radius: 4px;
   border: 1px solid var(--rule);
-  background: white;
+  background: var(--surface);
   color: var(--ink-soft);
   font-family: var(--font);
   font-size: 11px;
@@ -101,7 +101,7 @@
   border-color: color-mix(in oklch, var(--accent) 50%, var(--rule));
 }
 .pp-toggle.is-active {
-  color: white;
+  color: var(--on-accent);
   background: var(--accent);
   border-color: var(--accent);
 }
@@ -133,7 +133,7 @@
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--ink);
-  background: oklch(0.97 0.006 90);
+  background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 4px;
   padding: 0.95rem 1rem 0.95rem 2.7rem;
@@ -147,7 +147,7 @@
 .field input[type="text"]:hover { border-color: color-mix(in oklch, var(--ink) 25%, var(--rule)); }
 .field input[type="text"]:focus {
   border-color: var(--accent);
-  background: var(--bg);
+  background: var(--surface);
   box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 16%, transparent);
 }
 .input-wrap:focus-within .input-prefix { color: var(--accent); }

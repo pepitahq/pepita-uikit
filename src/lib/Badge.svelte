@@ -44,18 +44,18 @@
     color: var(--ink-soft);
   }
   .badge-success {
-    background: #f0fdf4;
-    border-color: #bbf7d0;
-    color: #15803d;
+    background: color-mix(in srgb, var(--success) 14%, var(--bg));
+    border-color: color-mix(in srgb, var(--success) 40%, var(--bg));
+    color: color-mix(in srgb, var(--success) 72%, var(--ink));
   }
   .badge-warning {
-    background: #fffbeb;
-    border-color: #fde68a;
-    color: #b45309;
+    background: color-mix(in srgb, var(--warning) 14%, var(--bg));
+    border-color: color-mix(in srgb, var(--warning) 40%, var(--bg));
+    color: color-mix(in srgb, var(--warning) 72%, var(--ink));
   }
   .badge-error {
-    background: #fef2f2;
-    border-color: #fecaca;
-    color: #b91c1c;
+    background: color-mix(in srgb, var(--error) 14%, var(--bg));
+    border-color: color-mix(in srgb, var(--error) 40%, var(--bg));
+    color: color-mix(in srgb, var(--error) 72%, var(--ink));
   }
 </style>

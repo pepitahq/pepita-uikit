@@ -1,12 +1,8 @@
+/* Typography tokens — fonts and base text only. Colors are NOT here; they come
+ * from the theme layer (theme.css). The body/::selection rules below reference
+ * the color vars (--bg/--ink/--accent) that theme.css provides, so load both. */
+
 :root {
-  --bg: #ffffff;
-  --ink: #17140f;
-  --ink-soft: #5a544b;
-  --ink-faint: #a9a199;
-  --rule: #ececea;
-
-  --accent: oklch(0.55 0.09 45);
-
   --f-mono:  "IBM Plex Mono", ui-monospace, Menlo, monospace;
   --f-serif: "IBM Plex Serif", Georgia, serif;
   --f-sans:  "IBM Plex Sans", -apple-system, Helvetica, Arial, sans-serif;
@@ -14,30 +10,11 @@
   --font: var(--f-mono);
 }
 
-/* Theme variants — scoped to ANY element carrying the attribute (not just
-   <html>), so a subtree/card/section can adopt its own theme and the CSS vars
-   cascade to its children. Values are verbatim from the app's styles.css; only
-   the `html` prefix is dropped to enable element-level theming. */
-
-/* bg variants */
-[data-bg="white"] { --bg:#ffffff; --ink:#17140f; --ink-soft:#5a544b; --ink-faint:#a9a199; --rule:#ececea; }
-[data-bg="cream"] { --bg:#f6f2ea; --ink:#1a1611; --ink-soft:#5e564a; --ink-faint:#a59b8c; --rule:#e5dfd3; }
-[data-bg="black"] { --bg:#0d0c0a; --ink:#efece5; --ink-soft:#9a948a; --ink-faint:#5a544b; --rule:#24211c; }
-
-/* accent variants */
-[data-accent="terracotta"] { --accent: oklch(0.55 0.09 45); }
-[data-accent="olive"]      { --accent: oklch(0.55 0.07 115); }
-[data-accent="slate"]      { --accent: oklch(0.5 0.03 250); }
-[data-accent="ink"]        { --accent: var(--ink); }
-
-/* font variants */
+/* font variants — element-scoped, so a subtree can switch typeface */
 [data-font="mono"]  { --font: var(--f-mono); }
 [data-font="serif"] { --font: var(--f-serif); }
 [data-font="sans"]  { --font: var(--f-sans); }
 
-/* Deliberate deviations from the app's styles.css: box-sizing is broadened to
-   pseudo-elements, and the app-only layout-shell rules (html/body margin,
-   height, flex column) are omitted — layout doesn't belong in a token layer. */
 *, *::before, *::after { box-sizing: border-box; }
 
 body {

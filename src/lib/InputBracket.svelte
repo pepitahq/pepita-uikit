@@ -30,7 +30,7 @@
   .bracket {
     border: 1px solid var(--rule);
     border-radius: 6px;
-    background: white;
+    background: var(--surface);
     transition: border-color 120ms;
   }
   .bracket:focus-within {

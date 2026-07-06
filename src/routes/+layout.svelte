@@ -1,4 +1,5 @@
 <script lang="ts">
+  import '$lib/styles/theme.css';
   import '$lib/styles/tokens.css';
   import '$lib/styles/primitives.css';
   let { children } = $props();

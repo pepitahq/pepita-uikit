@@ -22,7 +22,7 @@
 
   let galleryTab = $state('ai');
   let healthTab = $state('headers');
-  const bgs = ['white', 'cream', 'black'] as const;
+  const themes = ['light', 'dark'] as const;
 
   // Overlay demo state
   let modalOpen = $state(false);
@@ -198,15 +198,15 @@
 <main>
   <h1>@pepitahq/uikit — preview gallery</h1>
 
-  {#each bgs as bg (bg)}
-    <div class="frame" data-bg={bg}>
-      <p class="frame-label">data-bg="{bg}"</p>
+  {#each themes as t (t)}
+    <div class="frame" data-theme={t}>
+      <p class="frame-label">{t} (Rosé Pine {t === 'light' ? 'Dawn' : 'Main'})</p>
       {@render gallery()}
     </div>
   {/each}
 
   <!-- Overlays — rendered once (they cover the screen). -->
-  <div class="frame" data-bg="cream">
+  <div class="frame" data-theme="light">
     <p class="frame-label">Overlays</p>
 
     <section>
@@ -340,6 +340,8 @@
     border: 1px solid var(--rule);
     border-radius: 8px;
   }
+  /* Each frame forces a theme via data-theme="light|dark" (theme.css defines
+     those blocks), so both themes show regardless of the OS setting. */
   .frame-label {
     opacity: 0.6;
     font-size: 12px;
