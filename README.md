@@ -87,6 +87,51 @@ All components are presentational — you pass data + callbacks; you wire the be
 </InputBracket>
 ```
 
+## Overlays & dialogs
+
+| Component | Key props (→ snippets) |
+|---|---|
+| `Popover` | `open` (bindable), `placement`, `offset`, `anchor?: {x,y}`, `anchorEl?: HTMLElement` → `content`. Controlled floating panel; you render your own trigger. |
+| `Menu` | `items: MenuEntry[]` (`{label, icon?, shortcut?, danger?, disabled?, onSelect}` \| `{separator:true}`), `onClose?` — arrow-key nav |
+| `ContextMenu` | `open` (bindable), `x`, `y`, `items` — a `Menu` in a `Popover` at a point |
+| `Modal` | `open` (bindable), `title?`, `width?`, `height?`, `onClose?` → `icon?`, `tabs?`, `children` (body), `footer?`. Focus-trap + Escape/backdrop close. |
+| `UnderlineTabBar` | `tabs: {id,label,icon?}[]`, `activeId`, `onSelect(id)` — the modal-style tabs |
+| `Dialog` + `dialog` | imperative `dialog.alert/confirm/prompt`; mount `<Dialog />` once at the root |
+
+Layering: `Modal` (z 50) < `Popover`/`Menu` (z 60) < `Dialog`/`ContextMenu` (z 100).
+
+### Example — Dialog
+
+Mount `<Dialog />` once at the root, then call it imperatively anywhere:
+
+```svelte
+<script>
+  import { Dialog, dialog } from '@pepitahq/uikit';
+</script>
+
+<Dialog />
+```
+```js
+await dialog.alert('Saved.');
+if (!(await dialog.confirm('Delete site?', { destructive: true }))) return;
+const name = await dialog.prompt('Rename to:', { initialValue: current });
+```
+
+### Example — Popover (controlled)
+
+```svelte
+<script>
+  import { Popover } from '@pepitahq/uikit';
+  let open = $state(false);
+  let btn = $state<HTMLElement>();
+</script>
+
+<button bind:this={btn} onclick={() => (open = !open)}>Menu</button>
+<Popover bind:open anchorEl={btn} placement="bottom-end">
+  {#snippet content()}<div class="my-panel">…</div>{/snippet}
+</Popover>
+```
+
 ## Development
 
 ```bash

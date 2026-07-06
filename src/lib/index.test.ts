@@ -4,7 +4,8 @@ import * as uikit from '$lib/index';
 test('barrel exports every public component', () => {
   for (const name of [
     'Button', 'AuthButton', 'HeaderButton', 'TogglePill',
-    'TextInput', 'SplitActionButton', 'TabBar', 'Tab', 'InputBracket'
+    'TextInput', 'SplitActionButton', 'TabBar', 'Tab', 'InputBracket',
+    'UnderlineTabBar', 'Popover', 'Menu', 'ContextMenu', 'Modal', 'Dialog', 'dialog'
   ]) {
     expect(uikit[name as keyof typeof uikit], name).toBeTruthy();
   }
