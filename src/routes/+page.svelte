@@ -65,9 +65,95 @@
     ctxY = e.clientY;
     ctxOpen = true;
   }
+
+  // ── Foundations: typography + color tokens ─────────────────
+  const sample = 'The quick brown fox jumps over the lazy dog — 0123456789';
+
+  // Text-style tokens: the three typeface vars from tokens.css. --f-mono is the
+  // default (--font); a subtree switches typeface via [data-font="serif|sans"].
+  const typefaces = [
+    { token: '--f-mono', font: 'mono', label: 'IBM Plex Mono — default (--font)' },
+    { token: '--f-serif', font: 'serif', label: 'IBM Plex Serif' },
+    { token: '--f-sans', font: 'sans', label: 'IBM Plex Sans' }
+  ];
+  const weights = [300, 400, 500, 600, 700]; // loaded for all three families
+
+  // Color tokens from theme.css (each has a light + dark value). The code shown
+  // is read LIVE from the computed custom property inside each themed frame, so
+  // it never drifts when theme.css is regenerated (pnpm gen:theme).
+  const colorTokens = [
+    { token: 'bg' },
+    { token: 'surface' },
+    { token: 'surface-raised' },
+    { token: 'ink' },
+    { token: 'ink-soft' },
+    { token: 'ink-faint', note: 'derived' },
+    { token: 'accent' },
+    { token: 'on-accent' },
+    { token: 'success' },
+    { token: 'error' },
+    { token: 'warning' },
+    { token: 'rule', note: 'alpha' }
+  ];
+
+  // Fill the swatch's code slot with the token's resolved value in its current
+  // (themed) context — light frame reads the light hex, dark frame the dark one.
+  function showVar(node: HTMLElement, token: string) {
+    const paint = () => {
+      const v = getComputedStyle(node).getPropertyValue(`--${token}`).trim();
+      const el = node.querySelector<HTMLElement>('[data-code]');
+      if (el) el.textContent = v || '—';
+    };
+    paint();
+    return { update: paint };
+  }
 </script>
 
 {#snippet gallery()}
+  <section>
+    <h2>Typography — typefaces</h2>
+    <div class="type-list">
+      {#each typefaces as tf (tf.token)}
+        <div class="type-row">
+          <div class="type-meta">
+            <code class="name">{tf.token}</code>
+            <span class="type-hint">{tf.label} · data-font="{tf.font}"</span>
+          </div>
+          <p class="type-sample" style="font-family: var({tf.token});">{sample}</p>
+        </div>
+      {/each}
+    </div>
+  </section>
+
+  <section>
+    <h2>Typography — weights (Plex Mono)</h2>
+    <div class="type-list">
+      {#each weights as w (w)}
+        <div class="type-row">
+          <code class="name">{w}</code>
+          <p class="type-sample" style="font-weight: {w};">{sample}</p>
+        </div>
+      {/each}
+    </div>
+    <p class="frame-label">Base body text — 15px · line-height 1.55 · letter-spacing -0.005em · weight 400.</p>
+  </section>
+
+  <section>
+    <h2>Colors — tokens</h2>
+    <div class="swatch-grid">
+      {#each colorTokens as c (c.token)}
+        <div class="swatch" use:showVar={c.token}>
+          <span class="chip" style="background: var(--{c.token});"></span>
+          <span class="swatch-meta">
+            <code class="name">--{c.token}</code>
+            <code class="code" data-code>…</code>
+            {#if c.note}<span class="type-hint">{c.note}</span>{/if}
+          </span>
+        </div>
+      {/each}
+    </div>
+  </section>
+
   <section>
     <h2>Button</h2>
     <div class="row">
@@ -383,5 +469,64 @@
     color: var(--ink-soft);
     font-size: 13px;
     user-select: none;
+  }
+
+  /* Foundations: typography + color tokens */
+  .type-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .type-row {
+    display: grid;
+    grid-template-columns: 14rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .type-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .type-hint {
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .type-sample {
+    margin: 0;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+  .name {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.85rem;
+  }
+  .swatch {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .chip {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 auto;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .swatch-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+  .code {
+    font-size: 12px;
+    color: var(--ink);
   }
 </style>
