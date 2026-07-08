@@ -5,6 +5,7 @@
     text,
     tip,
     placement = 'bottom',
+    delay = 300,
     children
   }: {
     /** Compact one-line label (the common case for icon buttons). */
@@ -12,40 +13,88 @@
     /** Rich content (overrides `text`) — rare; kept for parity with Tooltip. */
     tip?: Snippet;
     placement?: 'top' | 'bottom';
+    /** Hover show-delay in ms (keyboard focus shows immediately). */
+    delay?: number;
     /** The trigger — must be focusable (a button/anchor) so the tip shows on
      *  keyboard focus as well as hover. */
     children: Snippet;
   } = $props();
+
+  let wrapEl: HTMLElement | undefined = $state();
+  let shown = $state(false);
+  let x = $state(0);
+  let y = $state(0);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  // Position the chip in the VIEWPORT (position: fixed), computed from the
+  // trigger's rect — so no ancestor's `overflow` can clip it and no stacking
+  // context can trap it. Same approach as Popover / ChartTooltip.
+  function place() {
+    if (!wrapEl) return;
+    const r = wrapEl.getBoundingClientRect();
+    x = r.left + r.width / 2; // centered on the trigger
+    y = placement === 'top' ? r.top - 6 : r.bottom + 6;
+  }
+
+  function show(immediate = false) {
+    clearTimeout(timer);
+    const reveal = () => {
+      place();
+      shown = true;
+    };
+    if (immediate) reveal();
+    else timer = setTimeout(reveal, delay);
+  }
+  function hide() {
+    clearTimeout(timer);
+    shown = false;
+  }
+  function onReflow() {
+    if (shown) place();
+  }
 </script>
+
+<svelte:window onscroll={onReflow} onresize={onReflow} />
 
 <!--
   A compact control-label tooltip. Unlike `Tooltip` (a padded, wrappable rich
   hover panel) and `ChartTooltip` (cursor-following, for charts), IconTip is a
   single-line inverted chip meant to label an icon-only control.
 
-  It's a pure CSS `:hover`/`:focus-within` tip — no native `title`, so it never
-  hits the browser tooltip's flaws: the ~1s delay, the timer that resets every
-  time the pointer crosses a sibling (fatal for a tight row of 22px icon
-  buttons), the suppression on disabled controls, and the lack of touch/focus
-  support. It appears instantly and stays glued to its own trigger.
+  No native `title` — that hits the browser tooltip's flaws (the ~1s delay, the
+  timer that resets every time the pointer crosses a sibling — fatal for a
+  tight row of 22px icon buttons — suppression on disabled controls, no
+  touch/focus support). This appears on hover/focus, glued to its own trigger,
+  and — being position:fixed — is never clipped by an ancestor's overflow.
 -->
-<span class="it-wrap">
+<span
+  class="it-wrap"
+  bind:this={wrapEl}
+  onmouseenter={() => show()}
+  onmouseleave={hide}
+  onfocusin={() => show(true)}
+  onfocusout={hide}
+  role="presentation"
+>
   {@render children()}
-  <span class="it it-{placement}" role="tooltip">
+  <span
+    class="it it-{placement}"
+    class:is-shown={shown}
+    role="tooltip"
+    style:left="{x}px"
+    style:top="{y}px"
+  >
     {#if tip}{@render tip()}{:else}{text}{/if}
   </span>
 </span>
 
 <style>
   .it-wrap {
-    position: relative;
     display: inline-flex;
     align-items: center;
   }
   .it {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
     /* Inverted chip: --ink surface with --bg text reads as a distinct "hint"
        against the UI, and stays legible in both themes (both tokens flip). */
     background: var(--ink);
@@ -60,15 +109,16 @@
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
-    /* Small show delay (matches a "hover intent" feel) but instant hide. */
     transition: opacity 90ms ease, visibility 0s linear 90ms;
     z-index: 80;
   }
-  .it-top {
-    bottom: calc(100% + 6px);
-  }
+  /* Center horizontally on the trigger; `top` placement also lifts the chip
+     fully above its anchor point. */
   .it-bottom {
-    top: calc(100% + 6px);
+    transform: translateX(-50%);
+  }
+  .it-top {
+    transform: translate(-50%, -100%);
   }
   /* Arrow. */
   .it::after {
@@ -86,10 +136,9 @@
     bottom: 100%;
     border-bottom-color: var(--ink);
   }
-  .it-wrap:hover .it,
-  .it-wrap:focus-within .it {
+  .it.is-shown {
     visibility: visible;
     opacity: 1;
-    transition: opacity 90ms ease 350ms, visibility 0s;
+    transition: opacity 90ms ease;
   }
 </style>

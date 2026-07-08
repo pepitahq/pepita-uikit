@@ -204,6 +204,15 @@
         {#snippet icon()}<ArrowsClockwise size={14} weight="bold" />{/snippet}
       </IconButton>
     </div>
+    <p class="frame-label" style="margin-top:1rem;">
+      Inside an <code>overflow:auto</code> box — the tip (position:fixed) escapes the clip:
+    </p>
+    <div class="clip-box">
+      <span style="font-size:12px;color:var(--ink-soft);">scrollable / clipped container</span>
+      <IconButton label="I escape the overflow box" placement="bottom">
+        {#snippet icon()}<Trash size={14} weight="bold" />{/snippet}
+      </IconButton>
+    </div>
   </section>
 
   <section>
@@ -555,5 +564,16 @@
   .code {
     font-size: 12px;
     color: var(--ink);
+  }
+  .clip-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    overflow: auto;
+    border: 1px dashed var(--rule);
+    border-radius: 6px;
   }
 </style>
