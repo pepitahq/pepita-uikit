@@ -81,6 +81,53 @@
   background: color-mix(in oklch, var(--accent) 20%, transparent);
 }
 
+/* ── Dialog action buttons: .dialog-btn family ──────────────── */
+/* Shared with Dialog.svelte (the alert/confirm/prompt primitive) — any
+   custom multi-button dialog (e.g. HistoryModal's restore picker, which
+   needs 3 actions + a checkbox and so can't use the simple imperative
+   dialog.confirm() API) should reuse these classes instead of inventing
+   its own button look. */
+.dialog-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 0.4rem 0.85rem;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms, color 120ms;
+}
+.dialog-btn-ghost {
+  background: transparent;
+  color: var(--ink-soft);
+}
+.dialog-btn-ghost:hover {
+  color: var(--ink);
+  border-color: var(--ink-faint);
+}
+.dialog-btn-primary {
+  background: var(--ink);
+  color: var(--on-accent);
+  border-color: var(--ink);
+}
+.dialog-btn-primary:hover {
+  background: color-mix(in oklch, var(--ink) 88%, var(--accent));
+}
+.dialog-btn-destructive {
+  background: var(--error);
+  color: var(--on-accent);
+  border-color: var(--error);
+}
+.dialog-btn-destructive:hover {
+  background: color-mix(in srgb, var(--error) 86%, black);
+}
+.dialog-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* ── Toggle pill: .pp-toggle ────────────────────────────────── */
 .pp-toggle {
   display: inline-flex;

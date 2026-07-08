@@ -217,41 +217,7 @@
     gap: 0.5rem;
     padding: 0.65rem 1.1rem 1rem;
   }
-  .dialog-btn {
-    font-family: var(--font);
-    font-size: 12px;
-    padding: 0.4rem 0.85rem;
-    border-radius: 4px;
-    border: 1px solid var(--rule);
-    cursor: pointer;
-    transition: background 120ms, border-color 120ms, color 120ms;
-  }
-  .dialog-btn-ghost {
-    background: transparent;
-    color: var(--ink-soft);
-  }
-  .dialog-btn-ghost:hover {
-    color: var(--ink);
-    border-color: var(--ink-faint);
-  }
-  .dialog-btn-primary {
-    background: var(--ink);
-    color: var(--on-accent);
-    border-color: var(--ink);
-  }
-  .dialog-btn-primary:hover {
-    background: color-mix(in oklch, var(--ink) 88%, var(--accent));
-  }
-  .dialog-btn-destructive {
-    background: var(--error);
-    color: var(--on-accent);
-    border-color: var(--error);
-  }
-  .dialog-btn-destructive:hover {
-    background: color-mix(in srgb, var(--error) 86%, black);
-  }
-  .dialog-btn:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+  /* .dialog-btn / .dialog-btn-ghost / .dialog-btn-primary /
+     .dialog-btn-destructive → primitives.css (shared, so other custom
+     dialogs elsewhere in the app can reuse the same button look). */
 </style>
