@@ -2,6 +2,8 @@
   import Button from '$lib/Button.svelte';
   import AuthButton from '$lib/AuthButton.svelte';
   import HeaderButton from '$lib/HeaderButton.svelte';
+  import IconButton from '$lib/IconButton.svelte';
+  import { ArrowsClockwise, Bug, DownloadSimple, Trash } from 'phosphor-svelte';
   import TogglePill from '$lib/TogglePill.svelte';
   import TextInput from '$lib/TextInput.svelte';
   import SplitActionButton from '$lib/SplitActionButton.svelte';
@@ -176,6 +178,31 @@
       <HeaderButton>{'Discard'}</HeaderButton>
       <HeaderButton active>{'History'}</HeaderButton>
       <HeaderButton disabled>{'Settings'}</HeaderButton>
+    </div>
+  </section>
+
+  <section>
+    <h2>IconButton</h2>
+    <p class="frame-label">Icon-only control with a built-in IconTip (hover / focus each one).</p>
+    <div class="row">
+      <IconButton label="Reload preview" onclick={() => {}}>
+        {#snippet icon()}<ArrowsClockwise size={14} weight="bold" />{/snippet}
+      </IconButton>
+      <IconButton label="Download" href="/dl" download>
+        {#snippet icon()}<DownloadSimple size={14} weight="bold" />{/snippet}
+      </IconButton>
+      <IconButton label="Inspect elements — hover to outline, click to pin" active={false}>
+        {#snippet icon()}<Bug size={14} weight="bold" />{/snippet}
+      </IconButton>
+      <IconButton label="Turn inspector off" active={true}>
+        {#snippet icon()}<Bug size={14} weight="bold" />{/snippet}
+      </IconButton>
+      <IconButton label="Delete preview" disabled>
+        {#snippet icon()}<Trash size={14} weight="bold" />{/snippet}
+      </IconButton>
+      <IconButton label="Tip on top" placement="top">
+        {#snippet icon()}<ArrowsClockwise size={14} weight="bold" />{/snippet}
+      </IconButton>
     </div>
   </section>
 

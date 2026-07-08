@@ -1,21 +1,33 @@
 {
   "name": "@pepitahq/uikit",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "pepita's shared UI kit — design tokens, CSS primitives, and Svelte 5 components.",
   "license": "MIT",
   "author": "Zoltan Gobolos <zgobolos@barelynotable.com>",
   "type": "module",
-  "repository": { "type": "git", "url": "git+https://github.com/pepitahq/pepita-uikit.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pepitahq/pepita-uikit.git"
+  },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "svelte": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js"
+    },
     "./theme.css": "./dist/styles/theme.css",
     "./tokens.css": "./dist/styles/tokens.css",
     "./primitives.css": "./dist/styles/primitives.css"
   },
-  "files": ["dist", "!dist/**/*.test.*", "!dist/test-helpers.*"],
-  "engines": { "node": ">=22" },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/test-helpers.*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "gen:theme": "node scripts/build-theme.mjs",
     "dev": "vite dev",
@@ -25,8 +37,12 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run --passWithNoTests"
   },
-  "peerDependencies": { "svelte": "^5" },
-  "dependencies": { "phosphor-svelte": "^3.0.0" },
+  "peerDependencies": {
+    "svelte": "^5"
+  },
+  "dependencies": {
+    "phosphor-svelte": "^3.0.0"
+  },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
