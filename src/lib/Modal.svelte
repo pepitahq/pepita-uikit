@@ -8,6 +8,7 @@
     title,
     width = '640px',
     height,
+    dismissable = true,
     onClose,
     icon,
     tabs,
@@ -20,6 +21,12 @@
     width?: string;
     /** Optional fixed panel height (CSS length). Clamped to 92vh. */
     height?: string;
+    /**
+     * When false, Escape / backdrop click / the X button are ignored — for
+     * vetoing dismissal while an operation is in flight (e.g. a delete).
+     * The caller can still close programmatically via `open`.
+     */
+    dismissable?: boolean;
     onClose?: () => void;
     icon?: Snippet;
     /** Optional strip between the header and the body (e.g. an UnderlineTabBar). */
@@ -34,6 +41,7 @@
   let panelEl: HTMLElement | undefined = $state();
 
   function close() {
+    if (!dismissable) return;
     open = false;
     onClose?.();
   }

@@ -33,3 +33,17 @@ test('backdrop click closes', async () => {
   await fireEvent.click(container.querySelector('.modal-backdrop')!);
   expect(screen.queryByText('BODY')).toBeNull();
 });
+
+test('dismissable={false} ignores Escape, backdrop click, and the close button', async () => {
+  const onClose = vi.fn();
+  const { container } = render(Modal, {
+    props: { open: true, title: 'Deleting', dismissable: false, onClose, children: textSnippet('BODY') }
+  });
+
+  await fireEvent.keyDown(window, { key: 'Escape' });
+  await fireEvent.click(container.querySelector('.modal-backdrop')!);
+  await fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+
+  expect(screen.getByText('BODY')).toBeInTheDocument();
+  expect(onClose).not.toHaveBeenCalled();
+});
