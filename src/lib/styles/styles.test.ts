@@ -4,17 +4,24 @@ import { test, expect } from 'vitest';
 
 const read = (p: string) => readFileSync(fileURLToPath(new URL(p, import.meta.url)), 'utf8');
 
-test('theme.css defines the light/dark palette + system switch', () => {
+test('theme.css (back-compat = default family) defines the active palette + system switch', () => {
   const css = read('./theme.css');
-  // three identity colors per theme + the active tokens
-  for (const v of ['--light-bg', '--dark-bg', '--light-ink', '--dark-ink', '--light-accent', '--dark-accent', '--bg', '--ink', '--accent']) {
+  // Active tokens, set directly per scope (no --light-*/--dark-* intermediates anymore —
+  // theme.css is now one self-contained family file; families live in ./themes/*.css).
+  for (const v of ['--bg', '--ink', '--accent', '--on-accent', '--surface', '--surface-raised', '--code-bg', '--rule', '--widget-border', '--success', '--error', '--warning']) {
     expect(css).toContain(v);
   }
-  // ink-soft is keyed; ink-faint/rule are derived from --ink / --bg
-  for (const v of ['--ink-soft', '--ink-faint', '--rule']) {
+  // ink-soft is keyed; ink-faint/code-bg are derived from other vars
+  for (const v of ['--ink-soft', '--ink-faint']) {
     expect(css).toContain(v);
   }
+  // OS follows the scheme; [data-theme] forces a subtree.
   expect(css).toContain('prefers-color-scheme: dark');
+  expect(css).toContain("[data-theme='light']");
+  expect(css).toContain("[data-theme='dark']");
+  // the old intermediate vars are gone
+  expect(css).not.toContain('--light-bg');
+  expect(css).not.toContain('--dark-bg');
   // generated from a named-key mapping, not hand-authored hex
   expect(css).toContain('GENERATED');
   // Rosé Pine identity values (base bg light/dark)

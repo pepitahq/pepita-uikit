@@ -2,3 +2,6 @@ node_modules/
 /dist/
 /.svelte-kit/
 /build/
+# Generated TS declarations for the build scripts (svelte-check/tsc emit) — not source.
+scripts/**/*.d.ts
+scripts/**/*.d.mts

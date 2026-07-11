@@ -1,6 +1,6 @@
 {
   "name": "@pepitahq/uikit",
-  "version": "0.5.2",
+  "version": "0.6.1",
   "description": "pepita's shared UI kit — design tokens, CSS primitives, and Svelte 5 components.",
   "license": "MIT",
   "author": "Zoltan Gobolos <zgobolos@barelynotable.com>",
@@ -18,7 +18,10 @@
     },
     "./theme.css": "./dist/styles/theme.css",
     "./tokens.css": "./dist/styles/tokens.css",
-    "./primitives.css": "./dist/styles/primitives.css"
+    "./primitives.css": "./dist/styles/primitives.css",
+    "./themes/*.json": "./dist/themes/*.json",
+    "./styles/themes/themes.json": "./dist/styles/themes/themes.json",
+    "./styles/themes/*.css": "./dist/styles/themes/*.css"
   },
   "files": [
     "dist",

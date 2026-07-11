@@ -1,151 +1,34 @@
-// Generate src/lib/styles/theme.css from a pair of VSCode theme JSONs.
-//
-// The pepita theme system pairs every semantic token with a *named VSCode
-// color key* (never a hardcoded hex) so any VSCode theme can be dropped in
-// and stay coherent. This script reads the vendored light+dark theme JSONs,
-// resolves each token's key, and emits the CSS custom properties.
-//
-// To retheme: swap the JSONs in src/lib/themes/, adjust THEME below if the
-// filenames change, and rerun `pnpm gen:theme`.
-//
-// Run: node scripts/build-theme.mjs   (or `pnpm gen:theme`)
-
-import { readFileSync, writeFileSync } from 'node:fs';
+// Generate the per-family theme CSS + manifest (and a back-compat theme.css)
+// from the vendored VSCode theme JSONs. Run: node scripts/build-theme.mjs
+// (or `pnpm gen:theme`). Compiler core: scripts/lib/build-themes.mjs.
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { buildThemes } from './lib/build-themes.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..');
+const themesSrc = join(root, 'src/lib/themes');
+const stylesDir = join(root, 'src/lib/styles');
+const outDir = join(stylesDir, 'themes');
 
-// The active theme pair. `light` fills --light-*, `dark` fills --dark-*.
-const THEME = {
-  name: 'Rosé Pine',
-  light: 'src/lib/themes/rose-pine-dawn.json',
-  dark: 'src/lib/themes/rose-pine.json'
-};
+// The curated set. Order = manifest order; the first is the default.
+const THEMES = [
+  { id: 'rose-pine', label: 'Rosé Pine', light: 'rose-pine-dawn.json', dark: 'rose-pine.json' },
+  { id: 'github', label: 'GitHub', light: 'github-light.json', dark: 'github-dark.json' },
+  { id: 'ethereal-lemons', label: 'Ethereal Lemons', light: 'ethereal-angelical-light.json', dark: 'ethereal-windows7.json' }
+];
 
-// token -> VSCode color key(s). First key present in the JSON wins (fallback
-// chain for themes with sparser coverage). Alpha is stripped — we control
-// opacity ourselves via color-mix.
-const KEYED = {
-  // identity
-  bg: ['editor.background'],
-  ink: ['foreground', 'editor.foreground'],
-  accent: ['button.background', 'textLink.foreground'],
-  // raised surfaces — modern themes separate by elevation, not lines, so
-  // panels/inputs sit on a background a step above --bg.
-  surface: ['input.background', 'editorWidget.background'],
-  'surface-raised': ['dropdown.background', 'editorWidget.background'],
-  // text
-  'ink-soft': ['descriptionForeground', 'editorLineNumber.foreground'],
-  'on-accent': ['button.foreground'], // readable text on an accent/ink-filled button
-  // status
-  success: ['terminal.ansiGreen', 'editorGutter.addedBackground', 'gitDecoration.addedResourceForeground'],
-  error: ['editorError.foreground', 'errorForeground'],
-  warning: ['editorWarning.foreground', 'list.warningForeground']
-  // no `info` — info UI is neutral grey (see Toaster), so no token needed
-};
+// VS Code Modern defaults — the fallback theme for any token a curated theme omits.
+const DEFAULTS = { light: '_defaults/vscode-light.json', dark: '_defaults/vscode-dark.json' };
 
-// Alpha-PRESERVED tokens: the theme's own translucent border/divider color.
-// Rosé Pine keeps rules near-invisible (editorGroup.border is fully
-// transparent) and leans on elevation, so we keep the low alpha rather than
-// strip it — a faithful, barely-there hairline.
-const KEYED_RAW = {
-  rule: ['input.border', 'dropdown.border', 'editorGroup.border']
-};
+const load = (f) => JSON.parse(readFileSync(join(themesSrc, f), 'utf8'));
+const { files, manifest, info } = buildThemes({ themes: THEMES, defaults: DEFAULTS, load });
 
-// Derived tokens: computed from the keyed tokens above, so they adapt to any
-// theme automatically. One definition — reads the active (system-switched)
-// --ink / --bg, so it follows a forced [data-theme] subtree too.
-const DERIVED = {
-  'ink-faint': 'color-mix(in srgb, var(--ink) 40%, var(--bg))'
-};
-
-// Normalize a VSCode hex. keepAlpha=false → solid #rrggbb (default); true →
-// preserve #rrggbbaa so translucent borders stay translucent.
-function norm(hex, key, theme, keepAlpha) {
-  if (typeof hex !== 'string' || !/^#[0-9a-fA-F]{3,8}$/.test(hex)) {
-    throw new Error(`bad color for "${key}" in ${theme}: ${JSON.stringify(hex)}`);
-  }
-  let h = hex.slice(1);
-  if (h.length === 3) h = [...h].map((c) => c + c).join(''); // #abc -> #aabbcc
-  if (h.length === 4) h = [...h].map((c) => c + c).join(''); // #abcd -> #aabbccdd
-  return '#' + (keepAlpha ? h : h.slice(0, 6)).toLowerCase();
+mkdirSync(outDir, { recursive: true });
+for (const [name, content] of Object.entries(files)) {
+  const dest = name === 'theme.css' ? join(stylesDir, name) : join(outDir, name);
+  writeFileSync(dest, content);
 }
-
-function resolve(colors, keys, token, themeName, keepAlpha) {
-  for (const k of keys) {
-    if (colors[k] !== undefined) return norm(colors[k], k, themeName, keepAlpha);
-  }
-  throw new Error(`no key present for "${token}" in ${themeName} (tried ${keys.join(', ')})`);
-}
-
-const light = JSON.parse(readFileSync(join(root, THEME.light), 'utf8')).colors;
-const dark = JSON.parse(readFileSync(join(root, THEME.dark), 'utf8')).colors;
-
-// One flat list of every token that has a light/dark pair (keyed solid + raw).
-const pairs = [
-  ...Object.entries(KEYED).map(([t, keys]) => ({ t, keys, raw: false })),
-  ...Object.entries(KEYED_RAW).map(([t, keys]) => ({ t, keys, raw: true }))
-].map(({ t, keys, raw }) => ({
-  t,
-  raw,
-  key: keys.find((k) => light[k] !== undefined),
-  l: resolve(light, keys, t, 'light', raw),
-  d: resolve(dark, keys, t, 'dark', raw)
-}));
-
-// Right-pad to width n for alignment. Never truncates — a token name longer
-// than n keeps its full text (a slice here would eat the trailing ':').
-const pad = (s, n) => s + ' '.repeat(Math.max(0, n - s.length));
-const activeBlock = (indent, which) =>
-  pairs.map((p) => `${indent}--${pad(p.t + ':', 14)} var(--${which}-${p.t});`).join('\n');
-
-const css = `/* GENERATED by scripts/build-theme.mjs from ${THEME.name} — do not edit by hand.
- * Every token is paired with a named VSCode color key so any theme drops in
- * coherently. Regenerate with: pnpm gen:theme
- *
- * token -> VSCode key:
-${pairs.map((p) => ` *   --${pad(p.t + ':', 15)} ${p.key}${p.raw ? '  (alpha kept)' : ''}`).join('\n')}
-${Object.keys(DERIVED)
-  .map((t) => ` *   --${pad(t + ':', 15)} (derived from --ink / --bg)`)
-  .join('\n')}
- *
- * The theme follows the OS (prefers-color-scheme). A [data-theme="light"|"dark"]
- * attribute on any element forces that theme for its subtree.
- */
-:root {
-${pairs.map((p) => `  --light-${pad(p.t + ':', 15)} ${p.l};`).join('\n')}
-
-${pairs.map((p) => `  --dark-${pad(p.t + ':', 16)} ${p.d};`).join('\n')}
-
-  /* active — light by default; dark via prefers-color-scheme below */
-${activeBlock('  ', 'light')}
-
-  /* derived — adapt to whichever --ink / --bg is active */
-${Object.entries(DERIVED)
-  .map(([t, expr]) => `  --${pad(t + ':', 14)} ${expr};`)
-  .join('\n')}
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-${activeBlock('    ', 'dark')}
-  }
-}
-
-/* explicit override — wins over the media query for a forced subtree */
-[data-theme='light'] {
-${activeBlock('  ', 'light')}
-}
-[data-theme='dark'] {
-${activeBlock('  ', 'dark')}
-}
-`;
-
-const out = join(root, 'src/lib/styles/theme.css');
-writeFileSync(out, css);
-console.log(
-  `✓ wrote ${out}\n  ${THEME.name}: ${pairs.length} keyed (${pairs.filter((p) => p.raw).length} alpha-kept) + ${Object.keys(DERIVED).length} derived`
-);
-for (const p of pairs) console.log(`  --${pad(p.t, 14)} ${pad(p.key, 24)} ${p.l} / ${p.d}`);
+console.log(`✓ ${manifest.themes.length} themes → src/lib/styles/themes/ (+ back-compat theme.css)`);
+for (const line of info) console.log('  · ' + line);

@@ -1,0 +1,17 @@
+{
+  "default": "rose-pine",
+  "themes": [
+    {
+      "id": "rose-pine",
+      "label": "Rosé Pine"
+    },
+    {
+      "id": "github",
+      "label": "GitHub"
+    },
+    {
+      "id": "ethereal-lemons",
+      "label": "Ethereal Lemons"
+    }
+  ]
+}
