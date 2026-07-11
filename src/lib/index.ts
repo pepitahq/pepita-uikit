@@ -1,4 +1,9 @@
-import './styles/theme.css';
+// NOTE: the color theme (theme.css / the per-family CSS) is deliberately NOT
+// imported here. Bundling it would force the default palette into every consumer
+// and load it after any runtime-swapped <link>, breaking theme switching. The
+// consumer loads the color layer itself: `@pepitahq/uikit/theme.css` (static
+// default) or a swappable `/themes/{id}.css` link. tokens.css (typography) +
+// primitives.css (classes) are theme-neutral, so they're fine to bundle.
 import './styles/tokens.css';
 import './styles/primitives.css';
 

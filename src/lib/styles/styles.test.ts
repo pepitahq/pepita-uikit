@@ -46,3 +46,14 @@ test('primitives.css defines the canonical classes', () => {
     expect(css).toContain(sel);
   }
 });
+
+test('the barrel does NOT force-bundle the color theme (it would override runtime theme-switching)', () => {
+  // theme.css defines :root color vars; if the index barrel imports it, every
+  // consumer that imports a component transitively bundles it, and it loads
+  // AFTER a runtime-swapped <link> — pinning the default theme. Consumers must
+  // load the color theme themselves (static @pepitahq/uikit/theme.css, or a
+  // swappable link). tokens.css (typography) + primitives.css (classes) are
+  // theme-neutral and fine to bundle.
+  const idx = read('../index.ts');
+  expect(idx).not.toMatch(/import\s+['"]\.\/styles\/theme\.css['"]/);
+});
