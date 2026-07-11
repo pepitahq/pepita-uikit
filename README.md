@@ -138,6 +138,7 @@ const name = await dialog.prompt('Rename to:', { initialValue: current });
 | Component | Key props (→ snippets) |
 |---|---|
 | `SegmentedControl` | `options: {value,label,disabled?}[]`, `value` (bindable), `onChange?` — pill-group toggle |
+| `Select` | `options: {value,label,description?,disabled?}[]`, `value` (bindable), `onChange?`, `disabled?`, `placeholder?`, `size: 'sm'\|'md'`, `fullWidth?`, `ariaLabel?` — themeable `<select>` replacement (Popover + listbox, keyboard nav + type-ahead) |
 | `Badge` | `variant: 'neutral'\|'success'\|'warning'\|'error'`, `icon?` → `children` — status pill |
 | `Tooltip` | `text?` or `tip?` (snippet), `placement`, `width?` → `children` (focusable trigger); hover/focus reveal |
 | `ChartTooltip` | `x`, `y`, `visible` → `content` — dark surface positioned at a point (chart hovers) |

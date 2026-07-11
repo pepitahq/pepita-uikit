@@ -7,7 +7,7 @@ test('barrel exports every public component', () => {
     'TextInput', 'SplitActionButton', 'TabBar', 'Tab', 'InputBracket',
     'UnderlineTabBar', 'Popover', 'Menu', 'ContextMenu', 'Modal', 'Dialog', 'dialog',
     'Toaster', 'toast',
-    'SegmentedControl', 'Badge', 'Tooltip', 'ChartTooltip'
+    'SegmentedControl', 'Select', 'Badge', 'Tooltip', 'ChartTooltip'
   ]) {
     expect(uikit[name as keyof typeof uikit], name).toBeTruthy();
   }

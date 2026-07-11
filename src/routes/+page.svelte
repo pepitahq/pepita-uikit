@@ -18,6 +18,7 @@
   import Toaster from '$lib/Toaster.svelte';
   import { toast } from '$lib/toast-store.svelte';
   import SegmentedControl from '$lib/SegmentedControl.svelte';
+  import Select from '$lib/Select.svelte';
   import Badge from '$lib/Badge.svelte';
   import Tooltip from '$lib/Tooltip.svelte';
   import ChartTooltip from '$lib/ChartTooltip.svelte';
@@ -34,6 +35,11 @@
   let ctxX = $state(0);
   let ctxY = $state(0);
   let segVal = $state('7d');
+
+  // Select demo state — mirrors the three real app call sites.
+  let themeSel = $state('rose-pine');
+  let modelSel = $state('medium');
+  let presetSel = $state('desktop');
 
   // ChartTooltip demo — a tiny bar chart; hovering a bar shows the tooltip at the cursor.
   const demoBars = [
@@ -300,6 +306,65 @@
   </section>
 
   <section>
+    <h2>Select</h2>
+    <div class="select-demos">
+      <div class="select-demo">
+        <span class="frame-label">md · full-width · theme chooser (Settings → Visual)</span>
+        <Select
+          fullWidth
+          ariaLabel="Theme"
+          options={[
+            { value: 'rose-pine', label: 'Rosé Pine' },
+            { value: 'github', label: 'GitHub' },
+            { value: 'ethereal-lemons', label: 'Ethereal Lemons' }
+          ]}
+          bind:value={themeSel}
+        />
+      </div>
+
+      <div class="select-demo">
+        <span class="frame-label">md · split label + description (AI model tier)</span>
+        <Select
+          ariaLabel="AI model"
+          options={[
+            { value: 'light', label: 'Light', description: 'Haiku 4.5' },
+            { value: 'medium', label: 'Medium', description: 'Sonnet 5 · recommended' },
+            { value: 'deep', label: 'Deep', description: 'Opus 4.8' },
+            { value: 'deepest', label: 'Deepest', description: 'Opus 4.8 · max reasoning' }
+          ]}
+          bind:value={modelSel}
+        />
+      </div>
+
+      <div class="select-demo">
+        <span class="frame-label">sm · compact · with disabled sentinel (device preset)</span>
+        <Select
+          size="sm"
+          ariaLabel="Device preset"
+          options={[
+            { value: 'custom', label: 'Custom (390×844)', disabled: true },
+            { value: 'desktop', label: 'Desktop' },
+            { value: 'laptop', label: 'Laptop' },
+            { value: 'tablet', label: 'iPad' },
+            { value: 'phone', label: 'iPhone 15' }
+          ]}
+          bind:value={presetSel}
+        />
+      </div>
+
+      <div class="select-demo">
+        <span class="frame-label">disabled control</span>
+        <Select
+          disabled
+          ariaLabel="Disabled example"
+          options={[{ value: 'a', label: 'Can’t open me' }]}
+          value="a"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>Badge</h2>
     <div class="row">
       <Badge>{'neutral'}</Badge>
@@ -453,6 +518,21 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+  .select-demos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .select-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 220px;
+  }
+  .select-demo .frame-label {
+    margin: 0;
   }
   .frame {
     background: var(--bg);
