@@ -12,6 +12,7 @@ export { default as Button } from './Button.svelte';
 export { default as AuthButton } from './AuthButton.svelte';
 export { default as HeaderButton } from './HeaderButton.svelte';
 export { default as IconButton } from './IconButton.svelte';
+export { default as DropdownAvatar } from './DropdownAvatar.svelte';
 export { default as TogglePill } from './TogglePill.svelte';
 export { default as TextInput } from './TextInput.svelte';
 export { default as SplitActionButton } from './SplitActionButton.svelte';

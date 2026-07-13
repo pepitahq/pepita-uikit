@@ -122,6 +122,11 @@
     background: var(--accent);
   }
   .ib.is-active:hover {
+    /* Re-assert the on-accent foreground: the base `.ib:hover` rule sets
+       `color: var(--accent)` at higher specificity than `.ib.is-active`, so
+       without this the icon would render accent-on-dark-accent (near-zero
+       contrast). Same guard the annotate button's `.is-send:hover` uses. */
+    color: var(--on-accent);
     background: color-mix(in oklch, var(--accent) 88%, black);
   }
 </style>
