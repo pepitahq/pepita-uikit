@@ -21,6 +21,7 @@
   import Select from '$lib/Select.svelte';
   import Badge from '$lib/Badge.svelte';
   import Tooltip from '$lib/Tooltip.svelte';
+  import IconTip from '$lib/IconTip.svelte';
   import ChartTooltip from '$lib/ChartTooltip.svelte';
 
   let galleryTab = $state('ai');
@@ -376,9 +377,46 @@
 
   <section>
     <h2>Tooltip</h2>
-    <Tooltip text="Balanced — Sonnet 5. What you want most of the time.">
-      <button type="button" class="cta cta-new">Hover / focus me</button>
-    </Tooltip>
+    <p class="frame-label">
+      The padded, WRAPPABLE rich panel — use it when the content is more than a label.
+      position:fixed, so it is never clipped by a scrolling ancestor's overflow.
+    </p>
+    <div class="row">
+      <Tooltip text="Balanced — Sonnet 5. What you want most of the time.">
+        <button type="button" class="cta cta-new">Simple text</button>
+      </Tooltip>
+
+      <Tooltip placement="bottom">
+        {#snippet tip()}
+          <strong>Optimised for the web</strong><br />
+          2736×3648 → 1920×2560<br />
+          1.6 MB → 181 KB (−89%)<br />
+          <code>hero.jpg.webp</code>
+        {/snippet}
+        <button type="button" class="cta cta-new">Rich, multi-line</button>
+      </Tooltip>
+    </div>
+  </section>
+
+  <section>
+    <h2>IconTip</h2>
+    <p class="frame-label">
+      The compact SINGLE-LINE inverted chip, for labelling an icon-only control. Also
+      position:fixed. Reach for Tooltip instead when the content needs to wrap.
+    </p>
+    <div class="row">
+      <IconTip text="Delete this file">
+        <button type="button" class="cta cta-new">Chip (bottom)</button>
+      </IconTip>
+
+      <IconTip text="Shown above the trigger" placement="top">
+        <button type="button" class="cta cta-new">Chip (top)</button>
+      </IconTip>
+
+      <IconTip text="No hover delay on keyboard focus" delay={0}>
+        <button type="button" class="cta cta-new">No delay</button>
+      </IconTip>
+    </div>
   </section>
 {/snippet}
 
