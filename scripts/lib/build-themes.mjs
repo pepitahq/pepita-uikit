@@ -20,6 +20,8 @@ const CHAINS = {
   success: ['terminal.ansiGreen', 'editorGutter.addedBackground', 'gitDecoration.addedResourceForeground'],
   error: ['editorError.foreground', 'errorForeground'],
   warning: ['editorWarning.foreground', 'list.warningForeground'],
+  // Info/notice + the app's drag/drop/active-hint highlight (the ex-`blue`).
+  info: ['editorInfo.foreground', 'charts.blue', 'terminal.ansiBlue', 'textLink.foreground'],
   rule: ['input.border', 'dropdown.border', 'editorGroup.border'],
   // A card/widget border, a touch stronger than the hairline `rule`.
   'widget-border': ['editorWidget.border', 'panel.border', 'menu.border', 'contrastBorder']
@@ -29,16 +31,23 @@ const RAW = new Set(['rule', 'widget-border']); // keep alpha (translucent borde
 const IDENTITY = new Set(['bg', 'ink', 'accent']);
 // Keys VS Code sources from its color registry, not the default theme JSON.
 // (editorWarning.foreground — platform/theme/common/colors/editorColors.ts)
-const REGISTRY_BACKSTOP = { warning: { light: '#bf8803', dark: '#cca700' } };
+const REGISTRY_BACKSTOP = {
+  warning: { light: '#bf8803', dark: '#cca700' },
+  // VS Code's info blue — used only if a theme AND the VS Code default both omit it.
+  info: { light: '#1a85ff', dark: '#3794ff' }
+};
 // pepita tokens computed from other vars (not a VS Code color). Resolve at
 // use-time, so they follow whichever scope's --ink/--bg/--surface-raised is active.
 const DERIVED = {
   'ink-faint': 'color-mix(in srgb, var(--ink) 40%, var(--bg))',
-  'code-bg': 'var(--surface-raised)'
+  'code-bg': 'var(--surface-raised)',
+  // Modal scrim — a dimming layer, identical in light/dark (it darkens whatever is
+  // behind the dialog). A fixed value in the theme layer, not a palette colour.
+  overlay: 'rgb(0 0 0 / 0.32)'
 };
 
 // Emission order per scope.
-const TOKENS = ['bg', 'ink', 'ink-soft', 'ink-faint', 'accent', 'on-accent', 'surface', 'surface-raised', 'code-bg', 'rule', 'widget-border', 'success', 'error', 'warning'];
+const TOKENS = ['bg', 'ink', 'ink-soft', 'ink-faint', 'accent', 'on-accent', 'surface', 'surface-raised', 'code-bg', 'rule', 'widget-border', 'success', 'error', 'warning', 'info', 'overlay'];
 
 function norm(hex, key, ctx, keepAlpha) {
   if (typeof hex !== 'string' || !/^#[0-9a-fA-F]{3,8}$/.test(hex))
