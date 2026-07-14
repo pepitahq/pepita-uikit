@@ -10,7 +10,11 @@
     disabled?: boolean;
     onSelect: () => void;
   };
-  export type MenuEntry = MenuItem | { separator: true };
+  /** A non-interactive section label, for a menu long enough that its items
+   *  fall into groups ("Tools", "Danger zone"). Skipped by keyboard navigation
+   *  — `buttons()` only collects real menu items — so it costs the user nothing
+   *  to arrow past. */
+  export type MenuEntry = MenuItem | { separator: true } | { heading: string };
 </script>
 
 <script lang="ts">
@@ -57,6 +61,8 @@
   {#each items as entry, i (i)}
     {#if 'separator' in entry}
       <div class="menu-sep" role="separator"></div>
+    {:else if 'heading' in entry}
+      <div class="menu-heading" role="presentation">{entry.heading}</div>
     {:else}
       {@const Icon = entry.icon}
       <button
@@ -138,5 +144,16 @@
     height: 1px;
     background: var(--rule);
     margin: 0.3rem 0;
+  }
+  /* Reads as a label for the items under it, not as one of them: smaller,
+     quieter, and letter-spaced so it never gets mistaken for a disabled item. */
+  .menu-heading {
+    padding: 0.3rem 0.5rem 0.2rem;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    user-select: none;
   }
 </style>

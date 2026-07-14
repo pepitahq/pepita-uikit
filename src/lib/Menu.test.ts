@@ -38,3 +38,38 @@ test('a disabled item does not fire onSelect', async () => {
   await flush();
   expect(onSelect).not.toHaveBeenCalled();
 });
+
+test('a heading labels its group without becoming an item', () => {
+  render(Menu, {
+    props: {
+      items: [
+        { label: 'History', onSelect: () => {} },
+        { separator: true },
+        { heading: 'Tools' },
+        { label: 'Health', onSelect: () => {} }
+      ]
+    }
+  });
+  expect(screen.getByText('Tools')).toBeInTheDocument();
+  // The heading must NOT be selectable — it is a label, not an action.
+  expect(screen.queryByRole('menuitem', { name: 'Tools' })).not.toBeInTheDocument();
+  expect(screen.getAllByRole('menuitem')).toHaveLength(2);
+});
+
+test('arrow keys skip the heading', async () => {
+  const { container } = render(Menu, {
+    props: {
+      items: [
+        { label: 'History', onSelect: () => {} },
+        { heading: 'Tools' },
+        { label: 'Health', onSelect: () => {} }
+      ]
+    }
+  });
+  const menu = container.querySelector('.menu') as HTMLElement;
+  // Mount focuses the first item. ArrowDown must land on Health — if the
+  // heading ever became focusable, keyboard users would arrow into a dead stop.
+  expect(screen.getByRole('menuitem', { name: 'History' })).toHaveFocus();
+  await fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  expect(screen.getByRole('menuitem', { name: 'Health' })).toHaveFocus();
+});

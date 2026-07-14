@@ -65,6 +65,10 @@
     { label: 'Rename', onSelect: () => {} },
     { label: 'Duplicate', onSelect: () => {} },
     { separator: true } as const,
+    { heading: 'Tools' } as const,
+    { label: 'Health', onSelect: () => {} },
+    { label: 'Analytics', onSelect: () => {} },
+    { separator: true } as const,
     { label: 'Delete', danger: true, onSelect: () => {} }
   ];
 
