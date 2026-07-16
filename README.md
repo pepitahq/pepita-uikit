@@ -176,9 +176,9 @@ const name = await dialog.prompt('Rename to:', { initialValue: current });
 | Component | Key props (→ snippets) |
 |---|---|
 | `SegmentedControl` | `options: {value,label,disabled?}[]`, `value` (bindable), `onChange?` — pill-group toggle |
-| `Select` | `options: {value,label,description?,disabled?}[]`, `value` (bindable), `onChange?`, `disabled?`, `placeholder?`, `size: 'sm'\|'md'`, `fullWidth?`, `ariaLabel?` — themeable `<select>` replacement (Popover + listbox, keyboard nav + type-ahead) |
+| `Select` | `options: {value,label,description?,disabled?}[]`, `value` (bindable), `onChange?`, `disabled?`, `placeholder?`, `size: 'sm'\|'md'`, `variant: 'field'\|'pill'` (default `field`; `pill` is the chip shape, for an inline choice rather than a form row), `placement?` (default `'bottom-start'`; use a `top-*` value where the trigger sits near the bottom of its pane), `fullWidth?`, `ariaLabel?` — themeable `<select>` replacement (Popover + listbox, keyboard nav + type-ahead) |
 | `Badge` | `variant: 'neutral'\|'success'\|'warning'\|'error'`, `icon?` → `children` — status pill |
-| `Tooltip` | `text?` or `tip?` (snippet), `placement`, `width?` → `children` (focusable trigger); hover/focus reveal |
+| `Tooltip` | `text?` or `tip?` (snippet), `placement`, `width?` → `children` (focusable trigger); hover/focus reveal. **`width` is capped at `min(90vw, 22rem)`** — a wider value is silently clamped, so keep it under the cap. |
 | `IconTip` | `text?` (compact one-line) or `tip?` (snippet), `placement: 'top'\|'bottom'`, `delay?` (300 ms) → `children` (focusable trigger) — a `position: fixed` tooltip that escapes ancestor `overflow`/clipping; what `IconButton` uses internally |
 | `ChartTooltip` | `x`, `y`, `visible` → `content` — dark surface positioned at a point (chart hovers) |
 
