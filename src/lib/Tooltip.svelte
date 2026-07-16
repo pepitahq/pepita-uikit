@@ -97,6 +97,8 @@
   }
   .tt {
     position: fixed;
+    /* Hard cap, including over an explicit `width` — so keep `width` under it
+       or the panel is silently clamped. */
     max-width: min(90vw, 22rem);
     padding: 0.55rem 0.7rem;
     border-radius: 5px;

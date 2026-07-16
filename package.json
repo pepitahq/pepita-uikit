@@ -1,6 +1,6 @@
 {
   "name": "@pepitahq/uikit",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "description": "pepita's shared UI kit \u2014 design tokens, CSS primitives, and Svelte 5 components.",
   "license": "MIT",
   "author": "Zoltan Gobolos <zgobolos@barelynotable.com>",

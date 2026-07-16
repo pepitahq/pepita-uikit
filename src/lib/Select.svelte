@@ -10,7 +10,7 @@
 
 <script lang="ts">
   import { CaretDown, Check } from 'phosphor-svelte';
-  import Popover from './Popover.svelte';
+  import Popover, { type Placement } from './Popover.svelte';
 
   let {
     options,
@@ -19,6 +19,8 @@
     disabled = false,
     placeholder = 'Select…',
     size = 'md',
+    variant = 'field',
+    placement = 'bottom-start',
     fullWidth = false,
     ariaLabel
   }: {
@@ -29,6 +31,14 @@
     placeholder?: string;
     /** 'sm' = 11px compact; 'md' = 13px default. */
     size?: 'sm' | 'md';
+    /** 'field' = a bordered form control (default). 'pill' = a fully-rounded
+     *  chip that hugs its value — for toolbars and composers, where a boxy form
+     *  field reads as heavy furniture rather than an inline choice. */
+    variant?: 'field' | 'pill';
+    /** Where the list opens. Use a `top-*` placement for a trigger that sits at
+     *  the bottom of its container (a composer row), so the list rises into the
+     *  space that exists instead of being clamped against the edge. */
+    placement?: Placement;
     /** Stretch the trigger to fill its container. */
     fullWidth?: boolean;
     ariaLabel?: string;
@@ -159,6 +169,7 @@
   type="button"
   class="ps-select-trigger"
   class:sm={size === 'sm'}
+  class:pill={variant === 'pill'}
   class:full={fullWidth}
   class:open
   {disabled}
@@ -177,7 +188,7 @@
   <span class="ps-select-caret"><CaretDown size={size === 'sm' ? 11 : 13} weight="bold" /></span>
 </button>
 
-<Popover bind:open anchorEl={triggerEl} placement="bottom-start" offset={4}>
+<Popover bind:open anchorEl={triggerEl} {placement} offset={4}>
   {#snippet content()}
     <ul
       id="{uid}-listbox"
@@ -249,6 +260,22 @@
     padding: 0.18rem 0.3rem 0.18rem 0.45rem;
     border-radius: 4px;
     gap: 0.3rem;
+  }
+  /* Pill: the same control, shaped as an inline chip rather than a form field —
+     for toolbars and composers, where a boxy form field reads as heavy
+     furniture rather than an inline choice.
+     Deliberately identical to the app's pill idiom (the editor header's balance
+     pill) but one size up: the family, --ink text, --surface fill and --rule
+     hairline already come from the base rule above; these three are the only
+     places the form-field default diverges from it. Keeps the base's 13px,
+     which IS the step up from the balance pill's 11px. */
+  .ps-select-trigger.pill {
+    border-radius: 999px;
+    font-weight: 400;
+    line-height: 1.5;
+    /* 13px × 1.5 + this padding + the hairline ≈ 30px — the same height as a
+       composer send button, so the row's controls sit on one baseline. */
+    padding: 0.25rem 0.45rem 0.25rem 0.75rem;
   }
   .ps-select-trigger:hover:not(:disabled) {
     border-color: color-mix(in oklch, var(--ink) 25%, var(--rule));
