@@ -123,6 +123,11 @@
             spellcheck="false"
           />
         {/if}
+        {#if current.link}
+          <a class="dialog-link" href={current.link.href} target="_blank" rel="noopener noreferrer"
+            >{current.link.label}</a
+          >
+        {/if}
       </form>
 
       <div class="dialog-actions">
@@ -210,6 +215,17 @@
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent) 18%, transparent);
+  }
+  .dialog-link {
+    display: inline-block;
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .dialog-link:hover {
+    color: var(--ink);
   }
   .dialog-actions {
     display: flex;

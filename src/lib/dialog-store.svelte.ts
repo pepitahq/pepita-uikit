@@ -14,6 +14,9 @@ interface BaseRequest {
   destructive?: boolean;
   confirmLabel?: string;
   cancelLabel?: string;
+  /** Optional quiet footer link under the message (e.g. the status page on
+   *  operation-failure alerts). Opens in a new tab. */
+  link?: { href: string; label: string };
 }
 
 interface PromptOptions extends BaseRequest {
