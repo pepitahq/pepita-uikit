@@ -181,6 +181,7 @@ const name = await dialog.prompt('Rename to:', { initialValue: current });
 | `Tooltip` | `text?` or `tip?` (snippet), `placement`, `width?` → `children` (focusable trigger); hover/focus reveal. **`width` is capped at `min(90vw, 22rem)`** — a wider value is silently clamped, so keep it under the cap. |
 | `IconTip` | `text?` (compact one-line) or `tip?` (snippet), `placement: 'top'\|'bottom'`, `delay?` (300 ms) → `children` (focusable trigger) — a `position: fixed` tooltip that escapes ancestor `overflow`/clipping; what `IconButton` uses internally |
 | `ChartTooltip` | `x`, `y`, `visible` → `content` — dark surface positioned at a point (chart hovers) |
+| `CollapsibleSection` | `label`, `open` (bindable, default closed), `count?` → `children` — uppercase disclosure header with rotating caret + optional right-aligned count; the expand/collapse pattern (Assets panel, new-site advanced settings) |
 
 ## Development
 

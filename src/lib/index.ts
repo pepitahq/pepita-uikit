@@ -27,6 +27,9 @@ export type { UnderlineTab } from './UnderlineTabBar.svelte';
 // Input frame
 export { default as InputBracket } from './InputBracket.svelte';
 
+// Disclosure
+export { default as CollapsibleSection } from './CollapsibleSection.svelte';
+
 // Overlays & dialogs
 export { default as Popover } from './Popover.svelte';
 export type { Placement, Point } from './Popover.svelte';
