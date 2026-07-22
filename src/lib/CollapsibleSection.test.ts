@@ -1,7 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import { test, expect } from 'vitest';
+import { createRawSnippet } from 'svelte';
 import CollapsibleSection from '$lib/CollapsibleSection.svelte';
 import { textSnippet } from '$lib/test-helpers';
+
+/** A snippet rendering a real <button>, for the actions slot. */
+const buttonSnippet = (text: string) =>
+  createRawSnippet(() => ({
+    render: () => `<button type="button" data-testid="action">${text}</button>`
+  }));
 
 test('renders the label and hides content while closed', () => {
   render(CollapsibleSection, {
@@ -35,4 +42,30 @@ test('shows the optional count badge', () => {
     props: { label: 'Videos', count: 3, children: textSnippet('x') }
   });
   expect(screen.getByText('3')).toBeInTheDocument();
+});
+
+test('renders the actions snippet in the header', () => {
+  render(CollapsibleSection, {
+    props: { label: 'Files', actions: buttonSnippet('New file'), children: textSnippet('x') }
+  });
+  expect(screen.getByTestId('action')).toHaveTextContent('New file');
+});
+
+test('clicking an action does not toggle the section', async () => {
+  render(CollapsibleSection, {
+    props: { label: 'Files', actions: buttonSnippet('New file'), children: textSnippet('inside') }
+  });
+  expect(screen.queryByText('inside')).not.toBeInTheDocument();
+  await fireEvent.click(screen.getByTestId('action'));
+  expect(screen.queryByText('inside')).not.toBeInTheDocument();
+  // the toggle button still works
+  await fireEvent.click(screen.getByRole('button', { name: /Files/ }));
+  expect(screen.getByText('inside')).toBeInTheDocument();
+});
+
+test('actions render while the section is closed', () => {
+  render(CollapsibleSection, {
+    props: { label: 'Videos', actions: buttonSnippet('Add'), children: textSnippet('x') }
+  });
+  expect(screen.getByTestId('action')).toBeInTheDocument();
 });

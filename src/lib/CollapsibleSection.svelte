@@ -13,6 +13,7 @@
     label,
     open = $bindable(false),
     count,
+    actions,
     children
   }: {
     label: string;
@@ -20,27 +21,34 @@
     open?: boolean;
     /** Optional right-aligned count badge (e.g. item count). */
     count?: number | string;
+    /** Optional right-aligned header actions (buttons). Rendered OUTSIDE the
+     *  toggle button — clicks here never toggle the section. */
+    actions?: Snippet;
     children: Snippet;
   } = $props();
 </script>
 
-<button
-  type="button"
-  class="csec"
-  onclick={() => (open = !open)}
-  aria-expanded={open}
->
-  <CaretDown size={12} weight="bold" class="csec-caret {open ? '' : 'closed'}" />
-  <span>{label}</span>
-  {#if count !== undefined}
-    <span class="csec-count">{count}</span>
+<div class="csec-row">
+  <button type="button" class="csec" onclick={() => (open = !open)} aria-expanded={open}>
+    <CaretDown size={12} weight="bold" class="csec-caret {open ? '' : 'closed'}" />
+    <span>{label}</span>
+    {#if count !== undefined}
+      <span class="csec-count">{count}</span>
+    {/if}
+  </button>
+  {#if actions}
+    <div class="csec-actions">{@render actions()}</div>
   {/if}
-</button>
+</div>
 {#if open}
   {@render children()}
 {/if}
 
 <style>
+  .csec-row {
+    display: flex;
+    align-items: center;
+  }
   .csec {
     display: flex;
     align-items: center;
@@ -55,9 +63,18 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--ink-soft);
+    flex: 1;
+    min-width: 0;
   }
   .csec:hover {
     color: var(--ink);
+  }
+  .csec-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    padding-right: 4px;
   }
   .csec-count {
     margin-left: auto;
